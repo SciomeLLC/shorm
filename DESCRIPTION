@@ -1,0 +1,18 @@
+Package: shorm
+Title: Detect the Shape of Dose-Response Curves
+Version: 0.0.0.9001
+Authors@R: 
+    person(given = "Ying", family = "Jin", email = "ying.jin@nih.gov", role = c("aut", "cre"))
+Description: The shorm package provides functions for hormesis screening by classifying the shapes of dose-response curves based on semiparametric tests. The shapes are indications of different potential toxicology effect. It also offers a scalable visualization scheme to present testing conclusions for large-scale dataset with a large number of dose-response curves.
+License: GPL-3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+        SRMERS,
+        ggplot2,
+        dplyr
+Collate:
+	'RepeatSHARP.R'
+	'SHARPtest.R'
+	'SharpScatter.R'
