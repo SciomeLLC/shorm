@@ -1,7 +1,7 @@
 ---
 title: "Repeated SHARP Shape Detection"
 author: "Ying Jin"
-date: "2026-02-12"
+date: "2026-02-19"
 output: 
   html_document:
     number_section: true
@@ -43,7 +43,7 @@ output:
 
 
 
-
+![](ReportFigs/overall_sum_label-1.jpeg)<!-- -->
 
 
 ## Scatterplot example of one assay
@@ -329,7 +329,7 @@ output:
 # Output from voting mechanism
 
 ## Scatter plots for p values
-![](ReportFigs/unnamed-chunk-9-1.jpeg)<!-- -->
+![](ReportFigs/unnamed-chunk-8-1.jpeg)<!-- -->
 
 
 ```
@@ -345,3 +345,64 @@ output:
 ##   U shape                  2        0                 3       0         2
 ##   Uncertain                0        1                 0       0         0
 ```
+# Demonstration of how to use the scatterplot
+
+I will directly use the 21 repitition p values to make this plot, as it essentially has no different from the 20 repitition one. Below are what I intend to plot
+
+## Chemical: Annatto Oil Soluble (NCGC00372615-01)
+
+- Ambiguous: mixture-rt-viability-hepg2-glo-p1_32h
+- Hormesis, increase & convex: mixture-ar-mda-kb2-luc-agonist-p1_luc
+- Hormesis, decrease & concave: mixture-aromatase-er-antagonist-p1_luc
+- Ushape, convex: ahr-p1_luc
+- Ushape, concave: mmp-p1_ratio
+- Monotone, increasing: Annatto Oil Soluble (NCGC00372615-01) vs pparg-bla-agonist-p1_ratio
+- Monotone, decreasing: mixture-hse-bla-p1_ratio
+- Uncertain:  mixture-rt-viability-hepg2-glo-p1_8h
+
+
+![](ReportFigs/scatter_demo-1.jpeg)<!-- -->
+
+
+
+```
+## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+```
+
+![](ReportFigs/demo_curves-1.jpeg)<!-- -->
+
+## Chemical: Turmeric (lot 90H73) (NCGC00372872-01)
+
+- ambigous: aromatase-er-aromatase-p1_luc
+- no shape: elg1-luc-agonist-p1_luc
+- hormesis, convex-increase: rt-viability-hek293-flor-p1_0h
+- hormesis, concave-decrease: rt-viability-hepg2-glo-p1_0h
+- U shape, concave: rt-viability-hek293-glo-p1_0h
+- U shape, convex: 
+- Monotone, increase: 
+- Monoton decrease: mmp-p1_ratio
+
+![](ReportFigs/scatter_demo2-1.jpeg)<!-- -->
+
+
+## Chemical: Kava kava extract (lot 562) (NCGC00372872-01)
+
+- ambigous: rt-viability-hepg2-flor-p1_40h
+- no shape: rt-viability-hepg2-flor-p1_8h
+- hormesis, convex-increase: elg1-luc-agonist-p1_luc
+- hormesis, concave-decrease: mmp-p1_ratio
+- U shape, concave: rt-viability-hek293-glo-p1_16h
+- U shape, convex: p53-bla-p1_ratio
+- Monotone, increase: er-luc-bg1-4e2-agonist-p1_luc
+- Monoton decrease: 
+
+![](ReportFigs/scatter_demo3-1.jpeg)<!-- -->
+
+
+
+
+```
+## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+```
+
+![](ReportFigs/demo_curves3-1.jpeg)<!-- -->

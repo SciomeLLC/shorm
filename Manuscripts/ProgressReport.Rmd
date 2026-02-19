@@ -169,23 +169,28 @@ df_shape %>%
 
 
 
-```{r, fig.height=8, fig.width=20, eval = FALSE}
+```{r overall_sum_label, fig.height=20, fig.width=15}
 # plot by botanical group
-# selected group
 df_shape %>%
-    filter(botanical_group == "Ginkgo Biloba") %>%
-    ggplot(aes(x=Readout, y = sample_id, fill=shape2))+
-    geom_tile()+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 20),
-          axis.text = element_text(size = 20),
-          # strip.text.y = element_text(angle = 0, size = 20), 
-          legend.title = element_blank(),
-          legend.text = element_text(size = 20),
-          legend.position = "top")+
-    scale_y_discrete(breaks = df_shape$sample_id, labels = df_shape$sample_name)+
-    scale_fill_manual(values = my_cols)+
-    # facet_grid(rows = vars(botanical_group), scales = "free_y", space = "free_y")+
-    labs(x=" ", y= " ")
+  # group assays by channel 
+  mutate(out_ch = sub(".*_", "", Readout), .after = "Readout") %>%
+  mutate(out_ch = ifelse(str_ends(out_ch, "h"), "time", out_ch)) %>%
+  ggplot(aes(x=Readout, y = sample_id, fill=shape2))+
+  geom_tile()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 10),
+        axis.text = element_text(size = 10),
+        # strip.text.y = element_text(angle = 0, size = 20), 
+        strip.text.y = element_text(angle = 0, size = 10),
+        strip.text.x = element_text(size = 10),
+        plot.margin = margin(10, 20, 10, 20),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 10),
+        legend.position = "top")+
+  scale_y_discrete(breaks = df_shape$sample_id, labels = df_shape$sample_name)+
+  scale_fill_manual(values = my_cols)+
+  facet_grid(rows = vars(str_wrap(botanical_group)), cols = vars(out_ch), 
+             scales = "free", space = "free")+
+  labs(x=" ", y= " ")
 ```
 
 
@@ -412,4 +417,144 @@ anti_join(pvals_out, vote_out) %>%
   rename(median = shape_label.x,
          vote = shape_label.y) %>%
   select(median, vote) %>% table()
+```
+# Demonstration of how to use the scatterplot
+
+I will directly use the 21 repitition p values to make this plot, as it essentially has no different from the 20 repitition one. Below are what I intend to plot
+
+## Chemical: Annatto Oil Soluble (NCGC00372615-01)
+
+- Ambiguous: mixture-rt-viability-hepg2-glo-p1_32h
+- Hormesis, increase & convex: mixture-ar-mda-kb2-luc-agonist-p1_luc
+- Hormesis, decrease & concave: mixture-aromatase-er-antagonist-p1_luc
+- Ushape, convex: ahr-p1_luc
+- Ushape, concave: mmp-p1_ratio
+- Monotone, increasing: Annatto Oil Soluble (NCGC00372615-01) vs pparg-bla-agonist-p1_ratio
+- Monotone, decreasing: mixture-hse-bla-p1_ratio
+- Uncertain:  mixture-rt-viability-hepg2-glo-p1_8h
+
+
+```{r scatter_demo, fig.height=6, fig.width=10}
+load(here("Data/VoteOutput/NCGC00372615-01.RData"))
+plot_outs <- c("rt-viability-hepg2-glo-p1_32h", "rt-viability-hepg2-glo-p1_8h", 
+               "ar-mda-kb2-luc-agonist-p1_luc", "aromatase-er-antagonist-p1_luc", 
+               "ahr-p1_luc" ,"mmp-p1_ratio", 
+               "pparg-bla-agonist-p1_ratio", "hse-bla-p1_ratio")
+
+# plot_outs <- df_shape %>% filter(sample_id == "NCGC00372615-01" & shape2 == "U shape")
+# plot_outs <- plot_outs$Readout
+
+color_label <- c("Ambiguous", "No shape", 
+                 "Hormesis (convex-increase) ", "Hormesis (concave-decrease)",
+                 "U shape (convex)", "U shape (concave)", 
+                 "Monotone (increase)", "Monotone (decrease)")
+names(color_label) <- plot_outs
+
+df_plot <- output_chem_k %>%
+  mutate(Readout = gsub("mixture-", "", Readout)) %>%
+  filter(Readout %in% plot_outs)
+SharpScatter(df_plot$increase, df_plot$decrease,
+             df_plot$concave,df_plot$convex, 
+             col = df_plot$Readout, size_point = 2)+
+  scale_color_discrete("", labels = color_label)
+```
+
+
+```{r demo_curves, fig.height=6, fig.width=10}
+ds_curves %>%
+  filter(sample_id=="NCGC00372615-01" & readout %in% plot_outs) %>%
+    ggplot(aes(x=concs, y=resps))+
+    geom_point(aes(col = readout))+
+    geom_smooth(aes(col = readout), span = 0.7)+
+    theme(legend.position = "none")+
+    facet_wrap(~readout, scales="free", nrow = 2)
+
+```
+
+## Chemical: Turmeric (lot 90H73) (NCGC00372872-01)
+
+- ambigous: aromatase-er-aromatase-p1_luc
+- no shape: elg1-luc-agonist-p1_luc
+- hormesis, convex-increase: rt-viability-hek293-flor-p1_0h
+- hormesis, concave-decrease: rt-viability-hepg2-glo-p1_0h
+- U shape, concave: rt-viability-hek293-glo-p1_0h
+- U shape, convex: 
+- Monotone, increase: 
+- Monoton decrease: mmp-p1_ratio
+
+```{r scatter_demo2, fig.height=6, fig.width=10}
+load(here("Data/VoteOutput/NCGC00372872-01.RData"))
+# examination
+# plot_outs <- df_shape %>% filter(sample_id == "NCGC00372872-01" & shape2 == "U shape")
+# plot_outs <- plot_outs$Readout
+plot_outs <- c("aromatase-er-aromatase-p1_luc", "elg1-luc-agonist-p1_luc",
+               "rt-viability-hek293-flor-p1_0h" ,"rt-viability-hepg2-glo-p1_0h",
+               "rt-viability-hek293-glo-p1_0h", "mmp-p1_ratio")
+color_label <- c("Ambiguous", "No shape", 
+                 "Hormesis (convex-increase) ", "Hormesis (concave-decrease)",
+                 "U shape (concave) & ambiguous", 
+                 "Monotone (decrease)")
+names(color_label) <- plot_outs
+
+df_plot <- output_chem_k %>%
+  mutate(Readout = gsub("mixture-", "", Readout)) %>%
+  filter(Readout %in% plot_outs) 
+
+SharpScatter(df_plot$increase, df_plot$decrease,
+             df_plot$concave,df_plot$convex, 
+             col = df_plot$Readout, size_point = 2)+
+  scale_color_discrete("", labels = color_label)
+```
+
+
+## Chemical: Kava kava extract (lot 562) (NCGC00372872-01)
+
+- ambigous: rt-viability-hepg2-flor-p1_40h
+- no shape: rt-viability-hepg2-flor-p1_8h
+- hormesis, convex-increase: elg1-luc-agonist-p1_luc
+- hormesis, concave-decrease: mmp-p1_ratio
+- U shape, concave: rt-viability-hek293-glo-p1_16h
+- U shape, convex: p53-bla-p1_ratio
+- Monotone, increase: er-luc-bg1-4e2-agonist-p1_luc
+- Monoton decrease: 
+
+```{r scatter_demo3, fig.height=6, fig.width=10}
+load(here("Data/VoteOutput/NCGC00372762-01.RData"))
+# examination
+# plot_outs <- df_shape %>% filter(sample_id == "NCGC00372762-01") %>% 
+#   # select(shape) %>% table()
+#   filter(shape == "decrease")
+# plot_outs <- plot_outs$Readout
+
+plot_outs <- c("rt-viability-hepg2-flor-p1_40h", "rt-viability-hepg2-flor-p1_8h",
+               "elg1-luc-agonist-p1_luc", "mmp-p1_ratio",
+               "rt-viability-hek293-glo-p1_16h", "p53-bla-p1_ratio",
+               "er-luc-bg1-4e2-agonist-p1_luc")
+color_label <- c("Ambiguous", "No shape", 
+                 "Hormesis (convex-increase) ", "Hormesis (concave-decrease)",
+                 "U shape (concave)", "U shape (convex)", 
+                 "Monotone (increase)")
+names(color_label) <- plot_outs
+
+df_plot <- output_chem_k %>%
+  mutate(Readout = gsub("mixture-", "", Readout)) %>%
+  filter(Readout %in% plot_outs) 
+
+SharpScatter(df_plot$increase, df_plot$decrease,
+             df_plot$concave,df_plot$convex, 
+             col = df_plot$Readout, size_point = 2)+
+  scale_color_discrete("", labels = color_label)
+```
+
+
+
+```{r demo_curves3, fig.height=6, fig.width=10}
+ds_curves %>%
+  filter(sample_id=="NCGC00372762-01" & readout %in% plot_outs) %>%
+    ggplot(aes(x=concs, y=resps))+
+    geom_point(aes(col = readout))+
+    geom_smooth(aes(col = readout), span = 0.7)+
+    theme(legend.position = "none")+
+    facet_wrap(~readout, scales="free", nrow = 2)
+
 ```
