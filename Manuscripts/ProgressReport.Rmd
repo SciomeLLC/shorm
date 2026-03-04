@@ -160,7 +160,27 @@ SharpScatter(df_plot$increase, df_plot$decrease, df_plot$concave, df_plot$convex
              col = df_plot$botanical_group)+
   labs(col="", title = "mixture-are-bla-p1_ratio")
 ```
+```{r, eval = F, fig.height=8, fig.width=10}
 
+# for supplements, scatter plots for all assays
+all_assays <- unique(df_pvals$Readout)
+
+for(r in all_assays){
+  df_plot_r <- df_pvals %>% 
+    filter(Readout ==r) %>%
+    left_join(sample_info)
+  scatter_r <- SharpScatter(df_plot_r$increase, 
+                            df_plot_r$decrease, 
+                            df_plot_r$concave, 
+                            df_plot_r$convex, 
+             col = df_plot_r$botanical_group)+
+  labs(col="", title = r)
+  
+  filepath <- paste0("Manuscripts/ReportFigs/ScatterAssay/", r, ".jpeg")
+  ggsave(here(filepath), height = 8, width = 10)
+  
+}
+```
 
 ## Table summary by botanical group (chemical) 
 
