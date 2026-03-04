@@ -1,7 +1,7 @@
 ---
 title: "Repeated SHARP Shape Detection"
 author: "Ying Jin"
-date: "2026-02-19"
+date: "2026-03-04"
 output: 
   html_document:
     number_section: true
@@ -13,10 +13,6 @@ output:
 
 
 
-# Raw curves 
-
-![](ReportFigs/exp_raw_curves-1.jpeg)<!-- -->
-
 
 
 
@@ -27,19 +23,14 @@ output:
 ## Joining with `by = join_by(sample_id)`
 ```
 
-
 # Overall summarization
 
 
 ```
 ## 
-##          Hormetic           U shape          Monotone         Uncertain 
-##               562               822               392                38 
-## No shape detected 
-##              3046
+##  Hormesis   U shape  Monotone Uncertain  No shape 
+##       561       823       394        39      3043
 ```
-
-![](ReportFigs/overall_sum-1.jpeg)<!-- -->
 
 
 
@@ -50,14 +41,12 @@ output:
 
 
 ```
-## Joining with `by = join_by(sample_id)`
+## Joining with `by = join_by(sample_id, sample_name, botanical_group,
+## botanical_form, supplier, sample_lot, stock_form, `stock_solution_mg/ml`)`
 ```
 
-![](ReportFigs/scatter_exp-1.jpeg)<!-- -->
+![](ReportFigs/one_assay_scatter_exp-1.jpeg)<!-- -->
 
-# Hormesis curves
-
-![](ReportFigs/hormesis_sum-1.jpeg)<!-- -->
 
 ## Table summary by botanical group (chemical) 
 
@@ -72,7 +61,7 @@ output:
 <tbody>
   <tr>
    <td style="text-align:left;"> Turmeric </td>
-   <td style="text-align:center;"> 158 (58.52%) </td>
+   <td style="text-align:center;"> 157 (58.15%) </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Ginkgo Biloba </td>
@@ -92,11 +81,11 @@ output:
   </tr>
   <tr>
    <td style="text-align:left;"> Milk Thistle </td>
-   <td style="text-align:center;"> 29 (5.97%) </td>
+   <td style="text-align:center;"> 30 (6.17%) </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Resveratrol </td>
-   <td style="text-align:center;"> 28 (17.28%) </td>
+   <td style="text-align:center;"> 29 (17.9%) </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Grape Seed </td>
@@ -104,7 +93,7 @@ output:
   </tr>
   <tr>
    <td style="text-align:left;"> Annatto </td>
-   <td style="text-align:center;"> 21 (3.24%) </td>
+   <td style="text-align:center;"> 19 (2.93%) </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Citral </td>
@@ -165,49 +154,49 @@ output:
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> ahr-p1 </td>
+   <td style="text-align:left;"> mixture-ahr-p1 </td>
    <td style="text-align:left;"> 16 (17.78%) </td>
    <td style="text-align:left;"> 10 (11.11%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> ar-mda-kb2-luc-agonist-p1 </td>
+   <td style="text-align:left;"> mixture-ar-mda-kb2-luc-agonist-p1 </td>
    <td style="text-align:left;"> 9 (10%) </td>
    <td style="text-align:left;"> 1 (1.11%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> ar-mda-kb2-luc-antagonist-p1 </td>
+   <td style="text-align:left;"> mixture-ar-mda-kb2-luc-antagonist-p1 </td>
    <td style="text-align:left;"> 11 (12.22%) </td>
    <td style="text-align:left;"> 3 (3.33%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> aromatase-er-agonist-p1 </td>
+   <td style="text-align:left;"> mixture-aromatase-er-agonist-p1 </td>
    <td style="text-align:left;"> 9 (10%) </td>
    <td style="text-align:left;"> 8 (8.89%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> aromatase-er-antagonist-p1 </td>
+   <td style="text-align:left;"> mixture-aromatase-er-antagonist-p1 </td>
    <td style="text-align:left;"> 18 (20%) </td>
    <td style="text-align:left;"> 5 (5.56%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> aromatase-er-aromatase-p1 </td>
+   <td style="text-align:left;"> mixture-aromatase-er-aromatase-p1 </td>
    <td style="text-align:left;"> 20 (22.22%) </td>
    <td style="text-align:left;"> 8 (8.89%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> elg1-luc-agonist-p1 </td>
+   <td style="text-align:left;"> mixture-elg1-luc-agonist-p1 </td>
    <td style="text-align:left;"> 7 (7.78%) </td>
    <td style="text-align:left;"> 13 (14.44%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> er-luc-bg1-4e2-agonist-p1 </td>
+   <td style="text-align:left;"> mixture-er-luc-bg1-4e2-agonist-p1 </td>
    <td style="text-align:left;"> 7 (7.78%) </td>
    <td style="text-align:left;"> 4 (4.44%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> er-luc-bg1-4e2-antagonist-p1 </td>
+   <td style="text-align:left;"> mixture-er-luc-bg1-4e2-antagonist-p1 </td>
    <td style="text-align:left;"> 7 (7.78%) </td>
-   <td style="text-align:left;"> 3 (3.33%) </td>
+   <td style="text-align:left;"> 4 (4.44%) </td>
   </tr>
 </tbody>
 </table>
@@ -222,32 +211,32 @@ output:
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> are-bla-p1 </td>
-   <td style="text-align:left;"> 39 (43.33%) </td>
-   <td style="text-align:left;"> 4 (4.44%) </td>
+   <td style="text-align:left;"> mixture-are-bla-p1 </td>
+   <td style="text-align:left;"> 38 (42.22%) </td>
+   <td style="text-align:left;"> 3 (3.33%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> hse-bla-p1 </td>
+   <td style="text-align:left;"> mixture-hse-bla-p1 </td>
    <td style="text-align:left;"> 4 (4.44%) </td>
    <td style="text-align:left;"> 1 (1.11%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> mmp-p1 </td>
+   <td style="text-align:left;"> mixture-mmp-p1 </td>
    <td style="text-align:left;"> 23 (25.56%) </td>
    <td style="text-align:left;"> 3 (3.33%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> p53-bla-p1 </td>
+   <td style="text-align:left;"> mixture-p53-bla-p1 </td>
    <td style="text-align:left;"> 6 (6.67%) </td>
    <td style="text-align:left;"> 1 (1.11%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> pparg-bla-agonist-p1 </td>
+   <td style="text-align:left;"> mixture-pparg-bla-agonist-p1 </td>
    <td style="text-align:left;"> 2 (2.22%) </td>
    <td style="text-align:left;"> 8 (8.89%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> pparg-bla-antagonist-p1 </td>
+   <td style="text-align:left;"> mixture-pparg-bla-antagonist-p1 </td>
    <td style="text-align:left;"> 6 (6.67%) </td>
    <td style="text-align:left;"> 9 (10%) </td>
   </tr>
@@ -269,7 +258,7 @@ output:
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> rt-viability-hek293-flor-p1 </td>
+   <td style="text-align:left;"> mixture-rt-viability-hek293-flor-p1 </td>
    <td style="text-align:left;"> 9 (10%) </td>
    <td style="text-align:left;"> 9 (10%) </td>
    <td style="text-align:left;"> 10 (11.11%) </td>
@@ -278,16 +267,16 @@ output:
    <td style="text-align:left;"> 9 (10%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> rt-viability-hek293-glo-p1 </td>
+   <td style="text-align:left;"> mixture-rt-viability-hek293-glo-p1 </td>
    <td style="text-align:left;"> 7 (7.78%) </td>
    <td style="text-align:left;"> 10 (11.11%) </td>
-   <td style="text-align:left;"> 14 (15.56%) </td>
+   <td style="text-align:left;"> 15 (16.67%) </td>
    <td style="text-align:left;"> 16 (17.78%) </td>
    <td style="text-align:left;"> 19 (21.11%) </td>
    <td style="text-align:left;"> 10 (11.11%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> rt-viability-hepg2-flor-p1 </td>
+   <td style="text-align:left;"> mixture-rt-viability-hepg2-flor-p1 </td>
    <td style="text-align:left;"> 9 (10%) </td>
    <td style="text-align:left;"> 10 (11.11%) </td>
    <td style="text-align:left;"> 12 (13.33%) </td>
@@ -296,80 +285,31 @@ output:
    <td style="text-align:left;"> 9 (10%) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> rt-viability-hepg2-glo-p1 </td>
+   <td style="text-align:left;"> mixture-rt-viability-hepg2-glo-p1 </td>
    <td style="text-align:left;"> 34 (37.78%) </td>
    <td style="text-align:left;"> 16 (17.78%) </td>
    <td style="text-align:left;"> 18 (20%) </td>
    <td style="text-align:left;"> 11 (12.22%) </td>
-   <td style="text-align:left;"> 6 (6.67%) </td>
+   <td style="text-align:left;"> 5 (5.56%) </td>
    <td style="text-align:left;"> 14 (15.56%) </td>
   </tr>
 </tbody>
 </table>
 
 
-## Individual dose-response curves examples
+# Individual dose-response curves examples
 
-![](ReportFigs/ds_hormesis_exp-1.jpeg)<!-- -->
-
-
-
-# Specific assay and chemicals as examples
-
-![](ReportFigs/chem_exp-1.jpeg)<!-- -->
-
-
-
-```
-## Joining with `by = join_by(sample_id, sample_name)`
-```
-
-![](ReportFigs/assay_exp-1.jpeg)<!-- -->
-
-# Output from voting mechanism
-
-## Scatter plots for p values
-![](ReportFigs/unnamed-chunk-8-1.jpeg)<!-- -->
-
-
-```
-## Joining with `by = join_by(sample_id, readout, shape_label)`
-```
-
-```
-##                    vote
-## median              Hormesis Monotone No shape detected U shape Uncertain
-##   Hormesis                 0        0                 0       3         0
-##   Monotone                 0        0                 3       0         0
-##   No shape detected        0        4                 0       5         0
-##   U shape                  2        0                 3       0         2
-##   Uncertain                0        1                 0       0         0
-```
-# Demonstration of how to use the scatterplot
-
-I will directly use the 21 repitition p values to make this plot, as it essentially has no different from the 20 repitition one. Below are what I intend to plot
-
-## Chemical: Annatto Oil Soluble (NCGC00372615-01)
-
-- Ambiguous: mixture-rt-viability-hepg2-glo-p1_32h
-- Hormesis, increase & convex: mixture-ar-mda-kb2-luc-agonist-p1_luc
-- Hormesis, decrease & concave: mixture-aromatase-er-antagonist-p1_luc
-- Ushape, convex: ahr-p1_luc
-- Ushape, concave: mmp-p1_ratio
-- Monotone, increasing: Annatto Oil Soluble (NCGC00372615-01) vs pparg-bla-agonist-p1_ratio
-- Monotone, decreasing: mixture-hse-bla-p1_ratio
-- Uncertain:  mixture-rt-viability-hepg2-glo-p1_8h
-
-
-![](ReportFigs/scatter_demo-1.jpeg)<!-- -->
-
+- Hormesis: NCGC0037
 
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 ```
 
-![](ReportFigs/demo_curves-1.jpeg)<!-- -->
+![](ReportFigs/shape_exp-1.jpeg)<!-- -->
+
+
+# Demonstration of how to use the scatterplot
 
 ## Chemical: Turmeric (lot 90H73) (NCGC00372872-01)
 
@@ -382,27 +322,12 @@ I will directly use the 21 repitition p values to make this plot, as it essentia
 - Monotone, increase: 
 - Monoton decrease: mmp-p1_ratio
 
-![](ReportFigs/scatter_demo2-1.jpeg)<!-- -->
-
-
-## Chemical: Kava kava extract (lot 562) (NCGC00372872-01)
-
-- ambigous: rt-viability-hepg2-flor-p1_40h
-- no shape: rt-viability-hepg2-flor-p1_8h
-- hormesis, convex-increase: elg1-luc-agonist-p1_luc
-- hormesis, concave-decrease: mmp-p1_ratio
-- U shape, concave: rt-viability-hek293-glo-p1_16h
-- U shape, convex: p53-bla-p1_ratio
-- Monotone, increase: er-luc-bg1-4e2-agonist-p1_luc
-- Monoton decrease: 
-
-![](ReportFigs/scatter_demo3-1.jpeg)<!-- -->
-
-
-
+![](ReportFigs/scatter_demo-1.jpeg)<!-- -->
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 ```
 
-![](ReportFigs/demo_curves3-1.jpeg)<!-- -->
+![](ReportFigs/scatter_demo_curves-1.jpeg)<!-- -->
+
+
