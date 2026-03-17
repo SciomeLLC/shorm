@@ -272,11 +272,12 @@ df_shape %>% group_by(Assay, Channel) %>%
 
 ```{r shape_exp, fig.height=6, fig.width=7}
 data.frame(
-sample_id = c("NCGC00372845-01", "NCGC00372744-01", "NCGC00372879-01", "NCGC00372775-01"),
+sample_id = c("NCGC00372845-01", "NCGC00372744-01", "NCGC00372687-01", "NCGC00372775-01"),
 readout = c("mixture-rt-viability-hek293-glo-p1_8h", "mixture-pparg-bla-antagonist-p1_ratio",
-            "mixture-ar-mda-kb2-luc-antagonist-p1_luc", "mixture-rt-viability-hek293-flor-p1_40h")
+            "mixture-rt-viability-hek293-glo-p1_8h", "mixture-rt-viability-hek293-flor-p1_40h")
 ) %>%
-  mutate(shape = c("Hormesis", "Monotone", "U shape", "No shape")) %>%
+  mutate(shape = factor(c("Hormesis", "Monotone", "U shape", "No shape"),
+                        levels = c("Hormesis", "Monotone", "U shape", "No shape"))) %>%
   left_join(ds_curves, by = c("sample_id", "readout")) %>%
   ggplot(aes(x=concs, y=resps))+
   geom_smooth()+
