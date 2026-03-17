@@ -1,13 +1,14 @@
 #' Implement SHARP test once on a dose-response curve
 #'
 #' @importFrom stats p.adjust
+#' @importFrom SRMERS MERS FERS
 #' 
 #' @param df Dose-response curve data in a table format. Dose and responses should be two separate columns with numeric values.
 #' @param mixed Logical indicator (TRUE for FALSE) for whether or not to use the mixed-model-based test.
 #' @param xName The column name for dose. Character string.
 #' @param yName The column name for response. Character string.
-#' @param rName The column name for random effect. Only used if mixed = TRUE. Character string.git a
-#' @param niter An integer for the number of iterations in SHARP test procedure
+#' @param rName The column name for random effect. Only used if mixed = TRUE. Character string.
+#' @param niter An integer for the number of iterations in SHARP test procedure.
 #'
 #' @return A vector of four p values after Holm adjustment, indicating the significance of four different shapes types.
 #'
@@ -31,12 +32,12 @@ SHARPtest <- function(df, mixed = F, xName, yName, rName, niter=1000){
   # mixed model based
   df <- as.data.frame(df)
   if(mixed == T){
-    shape_test <- SRMERS::MERS(y=yName, xMain=xName, xRand=rName,
+    shape_test <- MERS(y=yName, xMain=xName, xRand=rName,
                    dataset = df, nIter=niter)
   }
   # not mixed model based
   else{
-    shape_test <-SRMERS::FERS(y=yName, xMain=xName,dataset = df, nIter=niter)
+    shape_test <-FERS(y=yName, xMain=xName,dataset = df, nIter=niter)
     }
 
   # Holm adjustment
