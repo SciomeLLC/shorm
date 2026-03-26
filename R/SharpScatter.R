@@ -11,6 +11,9 @@
 #' @importFrom ggplot2 annotate
 #' @importFrom ggplot2 theme_minimal
 #' @importFrom ggplot2 geom_text
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom scales trans_new
 #'
 #' @details
 #' The shape scatter plot represents the four p-values (corresponding to four shape types) of SHARP test on a 2D space.
@@ -26,12 +29,27 @@
 #' @param alpha significance threshold. alpha=NULL corresponding to no significance threshold
 #' @param scale if the axis should be scale so that the significant threshold is placed in the center
 #' @param label labels of the point to visualize. label=NULL means no labeling.
-#' @param size_point,size_label the size of points and label. size_lable is used when label is not NULL
+#' @param size_point,size_label the size of points and label. size_lable is used when label is not NULL.
 #' @param ... additional parameters passed to ggplot
+#' @return The plotted ggplot object
 #'
 #' @export
+#' @examples
+#' # Simulate dose-response data
+#' x <- seq(0, 1, length.out = 48)
+#' y <- 2*sqrt(x)+rnorm(48)
+#' y[17:32] <- y[17:32]+0.5
+#' y[33:48] <- y[33:48]+1
+#' curve <- data.frame(x, y)
+#' curve$rep <- rep(1:3, each = 16)
+#'
+#' # Fixed-model based test
+#' \donttest{sharpt <- SHARPtest(curve, xName = "x", yName = "y")}
+#'
+#' # Plot the graph
+#' \donttest{SharpScatter(sharpt[1], sharpt[2], sharpt[3], sharpt[4])}
 
-SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = T, label = NULL, size_point=2, size_label = 5,...){
+SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE, label = NULL, size_point=2, size_label = 5,...){
   # coordinates for points
   ycoord = 0*(pinc==pdec)+(1-pinc)*(pinc<pdec)+(pdec-1)*(pinc>pdec)
   xcoord = 0*(pconv==pconc)+(pconc<pconv)*(1-pconc)+(pconc>pconv)*(pconv-1)
@@ -69,7 +87,7 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = T, labe
       return(origy)
     }
     # transformation object
-    NewTrans <- scales::trans_new(
+    NewTrans <- trans_new(
       name = "NewTrans",
       transform = NewScale,
       inverse = InverseNewScale

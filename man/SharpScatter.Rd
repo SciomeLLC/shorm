@@ -10,6 +10,7 @@ SharpScatter(
   pconc,
   pconv,
   alpha = 0.05,
+  scale = TRUE,
   label = NULL,
   size_point = 2,
   size_label = 5,
@@ -21,11 +22,16 @@ SharpScatter(
 
 \item{alpha}{significance threshold. alpha=NULL corresponding to no significance threshold}
 
+\item{scale}{if the axis should be scale so that the significant threshold is placed in the center}
+
 \item{label}{labels of the point to visualize. label=NULL means no labeling.}
 
-\item{size_point, size_label}{the size of points and label. size_lable is used when label is not NULL}
+\item{size_point, size_label}{the size of points and label. size_lable is used when label is not NULL.}
 
 \item{...}{additional parameters passed to ggplot}
+}
+\value{
+The plotted ggplot object
 }
 \description{
 Function to visualize SHARP test results
@@ -40,4 +46,19 @@ The coordinates of points are derived from p-values such that:
 \item Significant shapes are placed in the edge area out of the significance thresholds (p < 0.05)
 \item The closer points are to the significance thresholds, the more ambiguous shape conclusion is
 }
+}
+\examples{
+# Simulate dose-response data
+x <- seq(0, 1, length.out = 48)
+y <- 2*sqrt(x)+rnorm(48)
+y[17:32] <- y[17:32]+0.5
+y[33:48] <- y[33:48]+1
+curve <- data.frame(x, y)
+curve$rep <- rep(1:3, each = 16)
+
+# Fixed-model based test
+\donttest{sharpt <- SHARPtest(curve, xName = "x", yName = "y")}
+
+# Plot the graph
+\donttest{SharpScatter(sharpt[1], sharpt[2], sharpt[3], sharpt[4])}
 }
