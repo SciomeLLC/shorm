@@ -37,8 +37,8 @@ curve <- data.frame(x, y)
 curve$rep <- rep(1:3, each = 16)
 
 # Fixed-model based test
-RepeatSHARP(curve, nRep = 10, xName = "x", yName = "y")
+\donttest{RepeatSHARP(curve, nRep = 10, xName = "x", yName = "y")}
 
 # Mixed-model based test
-RepeatSHARP(curve, nRep = 10, mixed = T, xName = "x", yName = "y", rName = "rep")
+\donttest{RepeatSHARP(curve, nRep = 10, mixed = TRUE, xName = "x", yName = "y", rName = "rep")}
 }

@@ -1,16 +1,26 @@
 Package: shorm
-Title: SHARP Test for Hormesis
-Version: 0.0.0.9000
-Authors@R: 
-    person("Ying", "Jin", , "ying.jin@nih.gov", role = c("aut", "cre"))
-Description: The xxxx package provides functions for hormesis screening by classifying the shapes of dose-response curves based on semiparametric tests.
-             It also offers a scalable visualization scheme to present testing conclusions for large-scale dataset with a large number of dose-response curves. 
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Title: Detect the Shape of Dose-Response Curves
+Version: 0.1.1
+Authors@R: c( 
+    person(given = "Eric",
+    	   family = "Bair",
+	   role = c("aut", "cre"),
+	   email = "software.tools@sciome.com"),
+    person(given = "Ying",
+           family = "Jin",
+	   role = c("aut", "cph")))
+Description: Provides functions for hormesis screening by classifying the shapes of dose-response curves based on semiparametric tests. The shapes are indications of different potential toxicology effect. It also offers a scalable visualization scheme to present testing conclusions for large-scale dataset with a large number of dose-response curves.
+License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3.9000
+RoxygenNote: 7.3.3
 Imports:
         SRMERS,
         ggplot2,
+	scales,
         dplyr
+Collate:
+	'RepeatSHARP.R'
+	'SHARPtest.R'
+	'SharpScatter.R'
+URL: https://github.com/YinglJin-0203/WhatShape

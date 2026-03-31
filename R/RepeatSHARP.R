@@ -14,6 +14,7 @@
 #'
 #' @return A dataframe of test results from all repititions. Each row is one single test with four p values after Holm adjustment.
 #'
+#' @export
 #' @examples
 #' # Simulate dose-response data
 #' x <- seq(0, 1, length.out = 48)
@@ -24,16 +25,16 @@
 #' curve$rep <- rep(1:3, each = 16)
 #'
 #' # Fixed-model based test
-#' RepeatSHARP(curve, nRep = 10, xName = "x", yName = "y")
+#' \donttest{RepeatSHARP(curve, nRep = 10, xName = "x", yName = "y")}
 #'
 #' # Mixed-model based test
-#' RepeatSHARP(curve, nRep = 10, mixed = T, xName = "x", yName = "y", rName = "rep")
+#' \donttest{RepeatSHARP(curve, nRep = 10, mixed = TRUE, xName = "x", yName = "y", rName = "rep")}
 
 
 RepeatSHARP <- function(df, nRep, mixed=F, xName, yName, rName, niter=1000){
   pval_list <- lapply(1:nRep,
                       function(r){
-                        SHARPtest(df=df, mixed=mixed, xName=xName, yName=yName, niter=niter)
+                        SHARPtest(df=df, mixed=mixed, xName=xName, yName=yName, rName=rName, niter=niter)
                         })
   pval_df <- bind_rows(pval_list, .id="Rep")
   return(pval_df)

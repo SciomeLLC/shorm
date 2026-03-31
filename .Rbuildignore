@@ -1,5 +1,6 @@
 ^WhatShape\.Rproj$
 ^\.Rproj\.user$
-
 ^Manuscripts$
 ^Data$
+^PackageSummary.Rmd$
+^PackageSummary.html$

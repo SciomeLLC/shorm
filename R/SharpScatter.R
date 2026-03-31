@@ -1,5 +1,19 @@
 #' Function to visualize SHARP test results
 #'
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 geom_hline
+#' @importFrom ggplot2 geom_vline
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 annotate
+#' @importFrom ggplot2 theme_minimal
+#' @importFrom ggplot2 geom_text
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom scales trans_new
 #'
 #' @details
 #' The shape scatter plot represents the four p-values (corresponding to four shape types) of SHARP test on a 2D space.
@@ -15,13 +29,27 @@
 #' @param alpha significance threshold. alpha=NULL corresponding to no significance threshold
 #' @param scale if the axis should be scale so that the significant threshold is placed in the center
 #' @param label labels of the point to visualize. label=NULL means no labeling.
-#' @param size_point,size_label the size of points and label. size_lable is used when label is not NULL
+#' @param size_point,size_label the size of points and label. size_lable is used when label is not NULL.
 #' @param ... additional parameters passed to ggplot
+#' @return The plotted ggplot object
 #'
+#' @export
+#' @examples
+#' # Simulate dose-response data
+#' x <- seq(0, 1, length.out = 48)
+#' y <- 2*sqrt(x)+rnorm(48)
+#' y[17:32] <- y[17:32]+0.5
+#' y[33:48] <- y[33:48]+1
+#' curve <- data.frame(x, y)
+#' curve$rep <- rep(1:3, each = 16)
+#'
+#' # Fixed-model based test
+#' \donttest{sharpt <- SHARPtest(curve, xName = "x", yName = "y")}
+#'
+#' # Plot the graph
+#' \donttest{SharpScatter(sharpt[1], sharpt[2], sharpt[3], sharpt[4])}
 
-
-SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = T,
-                         label = NULL, size_point=2, size_label = 5,...){
+SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE, label = NULL, size_point=2, size_label = 5,...){
   # coordinates for points
   ycoord = 0*(pinc==pdec)+(1-pinc)*(pinc<pdec)+(pdec-1)*(pinc>pdec)
   xcoord = 0*(pconv==pconc)+(pconc<pconv)*(1-pconc)+(pconc>pconv)*(pconv-1)
@@ -33,7 +61,7 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = T,
     geom_vline(xintercept = 0, linewidth = 1) +  # center x-axis
     labs(x=" ", y=" ")+
     theme(panel.grid = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())+
-    annotate("text", x = c(-1, 1), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1)+
+    annotate("text", x = c(-0.9, 0.9), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1)+
     annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"), hjust = 1.1)+
     theme_minimal()
 
@@ -59,7 +87,7 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = T,
       return(origy)
     }
     # transformation object
-    NewTrans <- scales::trans_new(
+    NewTrans <- trans_new(
       name = "NewTrans",
       transform = NewScale,
       inverse = InverseNewScale
@@ -75,8 +103,7 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = T,
     sharp_scatter <- sharp_scatter+geom_text(aes(label=label), size = size_label)
   }
 
-
-  return(sharp_scatter)
+ return(sharp_scatter)
 
 }
 

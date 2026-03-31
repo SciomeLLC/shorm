@@ -15,9 +15,9 @@ SHARPtest(df, mixed = F, xName, yName, rName, niter = 1000)
 
 \item{yName}{The column name for response. Character string.}
 
-\item{rName}{The column name for random effect. Only used if mixed = TRUE. Character string.git a}
+\item{rName}{The column name for random effect. Only used if mixed = TRUE. Character string.}
 
-\item{niter}{An integer for the number of iterations in SHARP test procedure}
+\item{niter}{An integer for the number of iterations in SHARP test procedure.}
 }
 \value{
 A vector of four p values after Holm adjustment, indicating the significance of four different shapes types.
@@ -35,8 +35,8 @@ curve <- data.frame(x, y)
 curve$rep <- rep(1:3, each = 16)
 
 # Fixed-model based test
-SHARPtest(curve, xName = "x", yName = "y")
+\donttest{SHARPtest(curve, xName = "x", yName = "y")}
 
 # Mixed-model based test
-SHARPtest(curve, mixed = T, xName = "x", yName = "y", rName = "rep")
+\donttest{SHARPtest(curve, mixed = TRUE, xName = "x", yName = "y", rName = "rep")}
 }
