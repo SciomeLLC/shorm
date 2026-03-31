@@ -1,5 +1,5 @@
 ---
-title: "Automatic Hormesis Detection with SHARP"
+title: "SHARP Hormesis Detection"
 author: "Ying Jin"
 date: "`r Sys.Date()`"
 output:
@@ -82,7 +82,7 @@ To account for the uncertainty introduced by the random generation procedure wit
 test_repeat <- RepeatSHARP(df, nRep=20, mixed=F, xName="concs", yName="resps", niter=1000)
 ```
 
-The p values from each repitition is stored in a data frame:
+The p values from each repetition is stored in a data frame:
 
 ```{r}
 head(test_repeat)
@@ -136,6 +136,6 @@ RepPval <- bind_rows(RepPvalList, .id = "readout") %>%
   group_by(readout) %>% 
   summarise_at(vars(convex, increase, decrease, concave), median)
 
-SharpScatter(RepPval$increase, RepPval$decrease, RepPval$convex, RepPval$concave, color = RepPval$readout)
+SharpScatter(RepPval$increase, RepPval$decrease, RepPval$convex, RepPval$concave, color = RepPval$readout, scale = T)
 
 ```
