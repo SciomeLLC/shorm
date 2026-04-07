@@ -1,11 +1,11 @@
 Package: shorm
 Title: Detect the Shape of Dose-Response Curves
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c( 
     person(given = "Eric",
     	   family = "Bair",
 	   role = c("aut", "cre"),
-	   email = "software.tools@sciome.com"),
+	   email = "eric.bair@sciome.com"),
     person(given = "Ying",
            family = "Jin",
 	   role = c("aut", "cph")))
@@ -23,4 +23,4 @@ Collate:
 	'RepeatSHARP.R'
 	'SHARPtest.R'
 	'SharpScatter.R'
-URL: https://github.com/YinglJin-0203/WhatShape
+URL: https://github.com/YinglJin-0203/shorm
