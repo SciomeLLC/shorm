@@ -1,7 +1,7 @@
 ---
 title: "Repeated SHARP Shape Detection"
 author: "Ying Jin"
-date: "2026-03-17"
+date: "2026-04-07"
 output: 
   html_document:
     number_section: true
@@ -34,7 +34,7 @@ output:
 
 
 
-![](ReportFigs/overall_sum_label-1.jpeg)<!-- -->
+![](ReportFigs/overall_sum_label-1.pdf)<!-- -->
 
 
 ## Scatterplot example of one assay
@@ -45,7 +45,7 @@ output:
 ## botanical_form, supplier, sample_lot, stock_form, `stock_solution_mg/ml`)`
 ```
 
-![](ReportFigs/one_assay_scatter_exp-1.jpeg)<!-- -->
+![](ReportFigs/one_assay_scatter_exp-1.pdf)<!-- -->
 
 
 ## Table summary by botanical group (chemical) 
@@ -306,7 +306,7 @@ output:
 ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 ```
 
-![](ReportFigs/shape_exp-1.jpeg)<!-- -->
+![](ReportFigs/shape_exp-1.pdf)<!-- -->
 
 
 # Demonstration of how to use the scatterplot
@@ -322,12 +322,34 @@ output:
 - Monotone, increase: 
 - Monoton decrease: mmp-p1_ratio
 
-![](ReportFigs/scatter_demo-1.jpeg)<!-- -->
+
+
+
+
+
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 ```
 
-![](ReportFigs/scatter_demo_curves-1.jpeg)<!-- -->
+![](ReportFigs/scatter_demo-1.pdf)<!-- -->
+
+# Examples of false negative due to insufficient dose grid
 
 
+
+
+
+
+```
+## [1] 1000
+## [1] 1000
+```
+
+
+```
+## [1] 1000
+## [1] 1000
+```
+
+![](ReportFigs/false_negative-1.pdf)<!-- -->
