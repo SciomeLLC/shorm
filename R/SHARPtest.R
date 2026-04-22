@@ -1,8 +1,8 @@
 #' Implement SHARP test once on a dose-response curve
 #'
 #' @importFrom stats p.adjust
-#' @importFrom SRMERS MERS FERS
-#' 
+                                                                                                                                                                                                                                                                                          #' @importFrom SRMERS MERS FERS
+#'
 #' @param df Dose-response curve data in a table format. Dose and responses should be two separate columns with numeric values.
 #' @param mixed Logical indicator (TRUE for FALSE) for whether or not to use the mixed-model-based test.
 #' @param xName The column name for dose. Character string.

@@ -1,7 +1,7 @@
 ---
 title: "Repeated SHARP Shape Detection"
 author: "Ying Jin"
-date: "2026-04-07"
+date: "2026-04-22"
 output: 
   html_document:
     number_section: true
@@ -311,6 +311,16 @@ output:
 
 # Demonstration of how to use the scatterplot
 
+## Subspace labels
+
+
+
+
+
+
+![](ReportFigs/subspace-1.pdf)<!-- -->
+
+
 ## Chemical: Turmeric (lot 90H73) (NCGC00372872-01)
 
 - ambigous: aromatase-er-aromatase-p1_luc
@@ -322,17 +332,16 @@ output:
 - Monotone, increase: 
 - Monoton decrease: mmp-p1_ratio
 
-
-
-
-
+![](ReportFigs/scatter_demo_A-1.pdf)<!-- -->
 
 
 ```
 ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 ```
 
-![](ReportFigs/scatter_demo-1.pdf)<!-- -->
+![](ReportFigs/scatter_demo_B-1.pdf)<!-- -->
+
+
 
 # Examples of false negative due to insufficient dose grid
 
