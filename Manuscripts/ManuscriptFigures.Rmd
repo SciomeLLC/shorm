@@ -1,5 +1,5 @@
 ---
-title: "Repeated SHARP Shape Detection"
+title: "Figures Included in the Botanical Homesis Testing Manuscript"
 author: "Ying Jin"
 date: "`r Sys.Date()`"
 output: 
