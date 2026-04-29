@@ -4,7 +4,7 @@
 \alias{SHARPtest}
 \title{Implement SHARP test once on a dose-response curve}
 \usage{
-SHARPtest(df, mixed = F, xName, yName, rName, niter = 1000)
+SHARPtest(df, mixed = FALSE, xName, yName, rName, niter = 1000)
 }
 \arguments{
 \item{df}{Dose-response curve data in a table format. Dose and responses should be two separate columns with numeric values.}
@@ -35,8 +35,8 @@ curve <- data.frame(x, y)
 curve$rep <- rep(1:3, each = 16)
 
 # Fixed-model based test
-\donttest{SHARPtest(curve, xName = "x", yName = "y")}
+SHARPtest(curve, xName = "x", yName = "y", niter = 100)
 
 # Mixed-model based test
-\donttest{SHARPtest(curve, mixed = TRUE, xName = "x", yName = "y", rName = "rep")}
+SHARPtest(curve, mixed = TRUE, xName = "x", yName = "y", rName = "rep", niter = 100)
 }

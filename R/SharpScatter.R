@@ -44,10 +44,10 @@
 #' curve$rep <- rep(1:3, each = 16)
 #'
 #' # Fixed-model based test
-#' \donttest{sharpt <- SHARPtest(curve, xName = "x", yName = "y")}
+#' sharpt <- SHARPtest(curve, xName = "x", yName = "y", niter = 100)
 #'
 #' # Plot the graph
-#' \donttest{SharpScatter(sharpt[1], sharpt[2], sharpt[3], sharpt[4])}
+#' SharpScatter(sharpt[1], sharpt[2], sharpt[3], sharpt[4], niter = 100)
 
 SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE, label = NULL, size_point=2, size_label = 5,...){
   # coordinates for points
