@@ -1,5 +1,5 @@
 ---
-title: "Repeated SHARP Shape Detection"
+title: "Figures Included in the Botanical Homesis Testing Manuscript"
 author: "Ying Jin"
 date: "`r Sys.Date()`"
 output: 
@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, dev = "jpeg", fig.path = "ReportFigs/")
+knitr::opts_chunk$set(echo = FALSE, dev = "pdf", fig.path = "ReportFigs/")
 
 set.seed(333)
 
@@ -19,6 +19,8 @@ library(tidyverse)
 theme_set(theme_minimal())
 library(here)
 library(RColorBrewer)
+library(scales)
+library(SRMERS)
 # Pick a Brewer palette
 my_cols <- c(brewer.pal(8, "Set2")[c(2,6,3,8)], "#D3D3D3")
 # Apply globally
@@ -276,8 +278,7 @@ sample_id = c("NCGC00372845-01", "NCGC00372744-01", "NCGC00372687-01", "NCGC0037
 readout = c("mixture-rt-viability-hek293-glo-p1_8h", "mixture-pparg-bla-antagonist-p1_ratio",
             "mixture-rt-viability-hek293-glo-p1_8h", "mixture-rt-viability-hek293-flor-p1_40h")
 ) %>%
-  mutate(shape = factor(c("Hormesis", "Monotone", "U shape", "No shape"),
-                        levels = c("Hormesis", "Monotone", "U shape", "No shape"))) %>%
+  mutate(shape = factor(c("(a) Inverted J-shape", "(b) Monotone", "(c) Inverted U-shape", "(d) No shape"))) %>%
   left_join(ds_curves, by = c("sample_id", "readout")) %>%
   ggplot(aes(x=concs, y=resps))+
   geom_smooth()+
@@ -292,6 +293,81 @@ readout = c("mixture-rt-viability-hek293-glo-p1_8h", "mixture-pparg-bla-antagoni
 
 # Demonstration of how to use the scatterplot
 
+## Subspace labels
+
+```{r}
+# add shading
+alpha <- 0.05
+
+# boundaries
+cuts <- c(-1, -(1 - alpha), (1 - alpha), 1)
+
+# define intervals (3 per axis)
+x_intervals <- data.frame(
+  xmin = cuts[-length(cuts)],
+  xmax = cuts[-1]
+)
+
+y_intervals <- data.frame(
+  ymin = cuts[-length(cuts)],
+  ymax = cuts[-1]
+)
+
+# now combine intervals → 3 × 3 = 9 rectangles
+rects <- merge(x_intervals, y_intervals)
+
+# optional: assign colors (9 distinct ones)
+rects$fill <- c("Uncertain", "Monotone", "Hormesis", 
+                    "U shape", "No shape", "U shape", 
+                    "Hormesis", "Monotone", "Uncertain")
+rects$fill <- factor(rects$fill, levels = c("Hormesis", "U shape", "Monotone", "Uncertain","No shape"))
+```
+
+```{r}
+alpha = 0.05
+# scaling functions
+NewScale <- function(x){
+      newx <- ifelse(abs(x)>(1-alpha), 1-((1-abs(x))/alpha)*0.5, abs(x)*0.5/(1-alpha))
+      newx = sign(x)*newx
+      return(newx)
+    }
+
+InverseNewScale <- function(y){
+  origy <- ifelse(abs(y) > 0.5, 1 - ((1 - abs(y)) * alpha / 0.5), abs(y) * (1-alpha) / 0.5)
+  origy = sign(y) * origy
+  return(origy)
+}
+# transformation object
+NewTrans <- trans_new(
+  name = "NewTrans",
+  transform = NewScale,
+  inverse = InverseNewScale
+)
+```
+
+
+```{r subspace}
+ggplot()+
+    geom_hline(yintercept = 0, linewidth = 0.5) +  # center y-axis
+    geom_vline(xintercept = 0, linewidth = 0.5) +  # center x-axis
+    labs(x=" ", y=" ")+
+    theme(panel.grid = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())+
+    annotate("text", x = c(-0.9, 0.9), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1)+
+    annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"), hjust = 1.1)+
+    theme_minimal()+
+    geom_hline(yintercept = c(1-0.05, -1+0.05), linetype = "dashed", linewidth = 0.5)+
+    geom_vline(xintercept = c(1-0.05, -1+0.05), linetype = "dashed", linewidth = 0.5)+
+    scale_x_continuous(trans = NewTrans, limits = c(-1, 1))+
+    scale_y_continuous(trans = NewTrans, limits = c(-1, 1))+
+    geom_rect(
+        data = rects,
+        aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+        alpha = 0.8)+
+  scale_fill_manual(values = my_cols)
+
+```
+
+
 ## Chemical: Turmeric (lot 90H73) (NCGC00372872-01)
 
 - ambigous: aromatase-er-aromatase-p1_luc
@@ -303,7 +379,7 @@ readout = c("mixture-rt-viability-hek293-glo-p1_8h", "mixture-pparg-bla-antagoni
 - Monotone, increase: 
 - Monoton decrease: mmp-p1_ratio
 
-```{r scatter_demo, fig.height=6, fig.width=10}
+```{r scatter_demo_A, fig.height=8, fig.width=10}
 load(here("Data/VoteOutput/NCGC00372872-01.RData"))
 # examination
 # plot_outs <- df_shape %>% filter(sample_id == "NCGC00372872-01" & shape2 == "U shape")
@@ -312,11 +388,11 @@ plot_outs <- c("aromatase-er-aromatase-p1_luc", "elg1-luc-agonist-p1_luc",
                "rt-viability-hek293-flor-p1_0h" ,"rt-viability-hepg2-glo-p1_0h",
                "rt-viability-hek293-glo-p1_0h", "mmp-p1_ratio")
 plot_outs <- paste0("mixture-", plot_outs)
-color_label <- c("Ambiguous", "No shape", 
-                 "Hormesis (convex-increase) ", "Hormesis (concave-decrease)",
-                 "U shape (concave) & ambiguous", 
-                 "Monotone (decrease)")
-names(color_label) <- plot_outs
+# color_label <- c("Ambiguous", "No shape", 
+#                  "Hormesis (convex-increase) ", "Hormesis (concave-decrease)",
+#                  "U shape (concave) & ambiguous", 
+#                  "Monotone (decrease)")
+# names(color_label) <- plot_outs
 
 df_plot <- output_chem_k %>%
   filter(Readout %in% plot_outs) 
@@ -324,17 +400,93 @@ df_plot <- output_chem_k %>%
 SharpScatter(df_plot$increase, df_plot$decrease,
              df_plot$concave,df_plot$convex, 
              col = df_plot$Readout, size_point = 2)+
-  scale_color_discrete("", labels = color_label)
+  # scale_color_discrete("", labels = color_label)+
+  theme(legend.direction = "horizontal", legend.position = "top")+
+  labs(col=" ")
 ```
-```{r scatter_demo_curves, fig.height=6, fig.width=10}
+
+```{r scatter_demo_B, fig.height=6, fig.width=10}
 ds_curves %>%
   filter(sample_id=="NCGC00372872-01" & readout %in% plot_outs) %>%
     ggplot(aes(x=concs, y=resps))+
     geom_point(aes(col = readout))+
     geom_smooth(aes(col = readout), span = 0.7)+
     theme(legend.position = "none")+
-    facet_wrap(~readout, scales="free", nrow = 2)
+    facet_wrap(~readout, scales="free", nrow = 2)+
+  labs(x="Dose", y = "Response")
 
 ```
 
 
+
+# Examples of false negative due to insufficient dose grid
+
+```{r}
+source("../R/SHARPtest.R")
+
+# true
+x <- seq(0, 1, by = 0.01)
+fx <- -(sqrt(x)+0.2)*(1-x)^2+1
+df_tr <- data.frame(x, fx)
+# plot(x, fx)
+```
+
+
+
+```{r}
+# observation 1
+xobs <- seq(0, 0.4, length.out = 15)
+#y <- xobs+sin(xobs)+rnorm(10, 0, 0.1)
+y <-  -(sqrt(xobs)+0.2)*(1-xobs)^2+1+rnorm(length(xobs), 0, 0.01)
+df_obs <- data.frame(xobs, y)
+
+pvals <- SHARPtest(df_obs, mixed = F, xName = "xobs", yName = "y")
+
+# format p values
+pvals <- pvals[c("increase", "decrease", "convex", "concave")]
+pval_txt <- scales::pvalue(as_vector(pvals), add_p = T)
+pval_txt <- paste(names(pval_txt), pval_txt, sep = ": ", collapse = "\n")
+
+# fn_p1 <- ggplot()+
+#   geom_line(data = df_tr, aes(x=x, y=fx))+
+#   geom_point(data=df_obs, aes(x=xobs, y=y))+
+#   annotate("text", x = 0.9, y = 0.6, label = pval_txt)+
+#   labs(x="Dose", y="Response", title = "Undetected hormesis: U-shape")
+```
+
+```{r}
+# observation 2
+# monotone
+xobs2 <- seq(0.5, 0.8, length.out = 15)
+y2 <-  -(sqrt(xobs2)+0.2)*(1-xobs2)^2+1+rnorm(length(xobs2), 0, 0.01)
+df_obs2 <- data.frame(xobs2, y2)
+# plot(df_obs2$xobs2, df_obs2$y2)
+
+pvals2 <- SHARPtest(df_obs2, mixed = F, xName = "xobs2", yName = "y2")
+
+# format p values
+pvals2 <- pvals2[c("increase", "decrease", "convex", "concave")]
+pval_txt2 <- scales::pvalue(as_vector(pvals2), add_p = T)
+pval_txt2 <- paste(names(pval_txt2), pval_txt2, sep = ": ", collapse = "\n")
+
+# fn_p2 <- ggplot()+
+#   geom_line(data = df_tr, aes(x=x, y=fx))+
+#   geom_point(data=df_obs2, aes(x=xobs2, y=y2))+
+#   annotate("text", x = 0.9, y = 0.6, label = pval_txt2)+
+#   labs(x="Dose", y="Response", title = "Undetected hormesis: Monotone")
+
+```
+
+```{r false_negative, fig.height=5, fig.width=8}
+# ggpubr::ggarrange(fn_p1, fn_p2, nrow = 1)
+
+ggplot()+
+  geom_line(data = df_tr, aes(x=x, y=fx))+
+  geom_point(data=df_obs, aes(x=xobs, y=y, col = "U shape"))+
+  geom_point(data=df_obs2, aes(x=xobs2, y=y2, col = "Monotone"))+
+  annotate("text", x = 0.1, y = 0.95, label = pval_txt, col = "#FC8D62")+
+  annotate("text", x = 0.9, y = 0.6, label = pval_txt2, col = "#8DA0CB")+
+  labs(x="Dose", y="Response", title = "Undetected hormesis", col = " ")+
+  scale_color_manual(values = c("U shape" = "#FC8D62", 
+                                "Monotone" = "#8DA0CB"))
+```
