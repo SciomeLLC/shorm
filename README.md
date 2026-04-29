@@ -13,7 +13,7 @@ You can install the development version of shorm from GitHub with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("YinglJin-0203/WhatShape")
+devtools::install_github("YinglJin-0203/shorm")
 ```
 
 # Usage and Examples

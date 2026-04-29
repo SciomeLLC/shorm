@@ -4,7 +4,7 @@
 \alias{RepeatSHARP}
 \title{Implement SHARP test repeatedly on a dose-response curve}
 \usage{
-RepeatSHARP(df, nRep, mixed = F, xName, yName, rName, niter = 1000)
+RepeatSHARP(df, nRep, mixed = FALSE, xName, yName, rName, niter = 1000)
 }
 \arguments{
 \item{df}{Dose-response curve data in a table format. Dose and responses should be two separate columns with numeric values.}
@@ -37,8 +37,8 @@ curve <- data.frame(x, y)
 curve$rep <- rep(1:3, each = 16)
 
 # Fixed-model based test
-\donttest{RepeatSHARP(curve, nRep = 10, xName = "x", yName = "y")}
+RepeatSHARP(curve, nRep = 10, xName = "x", yName = "y", niter = 10)
 
 # Mixed-model based test
-\donttest{RepeatSHARP(curve, nRep = 10, mixed = TRUE, xName = "x", yName = "y", rName = "rep")}
+RepeatSHARP(curve, nRep = 10, mixed = TRUE, xName = "x", yName = "y", rName = "rep", niter = 10)
 }
