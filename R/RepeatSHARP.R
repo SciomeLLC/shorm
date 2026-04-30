@@ -25,13 +25,13 @@
 #' curve$rep <- rep(1:3, each = 16)
 #'
 #' # Fixed-model based test
-#' \donttest{RepeatSHARP(curve, nRep = 10, xName = "x", yName = "y")}
+#' RepeatSHARP(curve, nRep = 10, xName = "x", yName = "y", niter = 10)
 #'
 #' # Mixed-model based test
-#' \donttest{RepeatSHARP(curve, nRep = 10, mixed = TRUE, xName = "x", yName = "y", rName = "rep")}
+#' RepeatSHARP(curve, nRep = 10, mixed = TRUE, xName = "x", yName = "y", rName = "rep", niter = 10)
 
 
-RepeatSHARP <- function(df, nRep, mixed=F, xName, yName, rName, niter=1000){
+RepeatSHARP <- function(df, nRep, mixed=FALSE, xName, yName, rName, niter=1000){
   pval_list <- lapply(1:nRep,
                       function(r){
                         SHARPtest(df=df, mixed=mixed, xName=xName, yName=yName, rName=rName, niter=niter)

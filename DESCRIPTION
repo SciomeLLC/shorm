@@ -1,6 +1,6 @@
 Package: shorm
 Title: Detect the Shape of Dose-Response Curves
-Version: 0.1.1
+Version: 0.1.3
 Authors@R: c( 
     person(given = "Eric",
     	   family = "Bair",
@@ -9,7 +9,7 @@ Authors@R: c(
     person(given = "Ying",
            family = "Jin",
 	   role = c("aut", "cph")))
-Description: Provides functions for hormesis screening by classifying the shapes of dose-response curves based on semiparametric tests. The shapes are indications of different potential toxicology effect. It also offers a scalable visualization scheme to present testing conclusions for large-scale dataset with a large number of dose-response curves.
+Description: Provides functions for hormesis screening by classifying the shapes of dose-response curves based on semiparametric tests. The shapes are indications of different potential toxicology effect. It also offers a scalable visualization scheme to present testing conclusions for large-scale dataset with a large number of dose-response curves. For more information, see Jin et al. (2026) <https://github.com/YinglJin-0203/shorm/blob/main/Manuscripts/BotanicalHormesisTestingFinalDraft.docx>.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -23,4 +23,4 @@ Collate:
 	'RepeatSHARP.R'
 	'SHARPtest.R'
 	'SharpScatter.R'
-URL: https://github.com/YinglJin-0203/WhatShape
+URL: https://github.com/YinglJin-0203/shorm

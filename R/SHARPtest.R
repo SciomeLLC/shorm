@@ -23,12 +23,12 @@
 #' curve$rep <- rep(1:3, each = 16)
 #'
 #' # Fixed-model based test
-#' \donttest{SHARPtest(curve, xName = "x", yName = "y")}
+#' SHARPtest(curve, xName = "x", yName = "y", niter = 100)
 #'
 #' # Mixed-model based test
-#' \donttest{SHARPtest(curve, mixed = TRUE, xName = "x", yName = "y", rName = "rep")}
+#' SHARPtest(curve, mixed = TRUE, xName = "x", yName = "y", rName = "rep", niter = 100)
 
-SHARPtest <- function(df, mixed = F, xName, yName, rName, niter=1000){
+SHARPtest <- function(df, mixed = FALSE, xName, yName, rName, niter=1000){
   # mixed model based
   df <- as.data.frame(df)
   if(mixed == T){
