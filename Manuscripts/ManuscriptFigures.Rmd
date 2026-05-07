@@ -346,24 +346,26 @@ NewTrans <- trans_new(
 ```
 
 
-```{r subspace}
+```{r subspace, fig.height=8, fig.width=10}
 ggplot()+
     geom_hline(yintercept = 0, linewidth = 0.5) +  # center y-axis
     geom_vline(xintercept = 0, linewidth = 0.5) +  # center x-axis
-    labs(x=" ", y=" ")+
+    labs(x=" ", y=" ", fill = " ")+
     theme(panel.grid = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())+
-    annotate("text", x = c(-0.9, 0.9), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1)+
-    annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"), hjust = 1.1)+
     theme_minimal()+
     geom_hline(yintercept = c(1-0.05, -1+0.05), linetype = "dashed", linewidth = 0.5)+
     geom_vline(xintercept = c(1-0.05, -1+0.05), linetype = "dashed", linewidth = 0.5)+
-    scale_x_continuous(trans = NewTrans, limits = c(-1, 1))+
-    scale_y_continuous(trans = NewTrans, limits = c(-1, 1))+
+    scale_x_continuous(trans = NewTrans, limits = c(-1, 1),
+                        breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
+    scale_y_continuous(trans = NewTrans, limits = c(-1, 1),
+                        breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
     geom_rect(
         data = rects,
         aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
         alpha = 0.8)+
-  scale_fill_manual(values = my_cols)
+  scale_fill_manual(values = my_cols)+
+  annotate("text", x = c(-1, 1), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1)+
+  annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"), hjust = 1.1)
 
 ```
 
