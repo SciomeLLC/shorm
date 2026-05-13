@@ -159,9 +159,68 @@ df_plot <- df_pvals %>% filter(Readout == "mixture-are-bla-p1_ratio") %>%
   left_join(sample_info)
 
 SharpScatter(df_plot$increase, df_plot$decrease, df_plot$concave, df_plot$convex, 
-             col = df_plot$botanical_group)+
-  labs(col="", title = "mixture-are-bla-p1_ratio")
+             col = df_plot$botanical_group, scale = T, transform = NULL)+
+  labs(col="", title = "mixture-are-bla-p1_ratio",
+       caption = "Piecewise linear transform")
 ```
+
+```{r power_trans, fig.height=8, fig.width=10}
+alpha <- 0.05
+p <- log(0.5) / log(alpha)
+
+# Transformation:
+# maps ±(1 - alpha) to ±0.5, while keeping -1 -> -1, 0 -> 0, 1 -> 1
+NewScalePower <- function(x) {
+  sign(x) * (1 - (1 - abs(x))^p)
+}
+
+# Inverse transformation
+InverseNewScalePower <- function(y) {
+  sign(y) * (1 - (1 - abs(y))^(1 / p))
+}
+
+# Transformation object
+NewTransPower <- trans_new(
+  name = "edge_expand",
+  transform = NewScalePower,
+  inverse = InverseNewScalePower
+)
+
+SharpScatter(df_plot$increase, df_plot$decrease, df_plot$concave, df_plot$convex, 
+             col = df_plot$botanical_group, scale = T, transform = NewTransPower)+
+  labs(col="", title = "mixture-are-bla-p1_ratio",
+       caption = "Power-ish transform: f(x) = 1-x^a, a=log(0.5)/log(alpha)")
+```
+
+```{r log_trans, fig.height=8, fig.width=10}
+alpha <- 0.05
+
+# Choose a so that ±(1 - alpha) maps to ±0.5
+a <- (1 - 2 * alpha) / alpha^2
+
+# Symmetric log-based transformation
+NewScaleLog <- function(x) {
+  sign(x) * (1 - log(1 + a * (1 - abs(x))) / log(1 + a))
+}
+
+# Inverse transformation
+InverseNewScaleLog <- function(y) {
+  sign(y) * ((1 + a - (1 + a)^(1 - abs(y))) / a)
+}
+
+# Transformation object
+NewTransLog <- trans_new(
+  name = "edge_expand_log",
+  transform = NewScaleLog,
+  inverse = InverseNewScaleLog
+)
+
+SharpScatter(df_plot$increase, df_plot$decrease, df_plot$concave, df_plot$convex, 
+             col = df_plot$botanical_group, scale = T, transform = NewTransLog)+
+  labs(col="", title = "mixture-are-bla-p1_ratio",
+       caption = "Log-ish transform: f(x) = 1- log(1+ax)/log(1+a), a = 1-2alpha/alpha^2")
+```
+
 ```{r, eval = F, fig.height=8, fig.width=10}
 
 # for supplements, scatter plots for all assays

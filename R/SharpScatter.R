@@ -28,6 +28,7 @@
 #' @param pinc,pdec,pconc,pconv SHARP test p-values corresponding to increasing, decreasing, concave and convex
 #' @param alpha significance threshold. alpha=NULL corresponding to no significance threshold
 #' @param scale if the axis should be scale so that the significant threshold is placed in the center
+#'              Temporary: customized transformation
 #' @param label labels of the point to visualize. label=NULL means no labeling.
 #' @param size_point,size_label the size of points and label. size_lable is used when label is not NULL.
 #' @param ... additional parameters passed to ggplot
@@ -49,7 +50,9 @@
 #' # Plot the graph
 #' SharpScatter(sharpt[1], sharpt[2], sharpt[3], sharpt[4], niter = 100)
 
-SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE, label = NULL, size_point=2, size_label = 5,...){
+SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE,
+                         transform = NULL,
+                         label = NULL, size_point=2, size_label = 5,...){
   # coordinates for points
   ycoord = 0*(pinc==pdec)+(1-pinc)*(pinc<pdec)+(pdec-1)*(pinc>pdec)
   xcoord = 0*(pconv==pconc)+(pconc<pconv)*(1-pconc)+(pconc>pconv)*(pconv-1)
@@ -71,7 +74,7 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE, l
   }
 
   # scale significance threshold
-  if(scale){
+  if(scale & is.null(transform)){
     NewScale <- function(x){
       newx <- ifelse(abs(x)>(1-alpha), 1-((1-abs(x))/alpha)*0.5, abs(x)*0.5/(1-alpha))
       newx = sign(x)*newx
@@ -95,6 +98,13 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE, l
                          breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
       scale_y_continuous(trans = NewTrans, limits = c(-1, 1),
                          breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))
+  } else if(scale & !is.null(transform)) {
+    sharp_scatter <- sharp_scatter+
+      scale_x_continuous(trans = transform, limits = c(-1, 1),
+                         breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
+      scale_y_continuous(trans = transform, limits = c(-1, 1),
+                         breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))
+
   } else {
     sharp_scatter <- sharp_scatter+
       scale_x_continuous(breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
