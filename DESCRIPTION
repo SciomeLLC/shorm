@@ -13,7 +13,6 @@ Description: Provides functions for hormesis screening by classifying the shapes
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Imports:
         SRMERS,
         ggplot2,
@@ -24,3 +23,4 @@ Collate:
 	'SHARPtest.R'
 	'SharpScatter.R'
 URL: https://github.com/YinglJin-0203/shorm
+Config/roxygen2/version: 8.0.0

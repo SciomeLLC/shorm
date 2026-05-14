@@ -1,7 +1,7 @@
 ---
 title: "Figures Included in the Botanical Homesis Testing Manuscript"
 author: "Ying Jin"
-date: "2026-05-13"
+date: "2026-05-14"
 output: 
   html_document:
     number_section: true
@@ -47,9 +47,9 @@ output:
 
 ![](ReportFigs/one_assay_scatter_exp-1.pdf)<!-- -->
 
-![](ReportFigs/power_trans-1.pdf)<!-- -->
 
-![](ReportFigs/log_trans-1.pdf)<!-- -->
+
+
 
 
 

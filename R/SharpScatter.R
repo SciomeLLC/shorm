@@ -15,8 +15,18 @@
 #' @importFrom ggplot2 scale_y_continuous
 #' @importFrom scales trans_new
 #'
-#' @details
-#' The shape scatter plot represents the four p-values (corresponding to four shape types) of SHARP test on a 2D space.
+#'
+#'
+#'
+#' @param pinc,pdec,pconc,pconv SHARP test p-values corresponding to increasing, decreasing, concave and convex
+#' @param alpha significance threshold. alpha=NULL corresponding to no significance threshold
+#' @param scale how axis should be scaled for better visual presentation. Choose between none, log and linear. Please see details for the transformation fomula.
+#' @param label labels of the point to visualize. label=NULL means no labeling.
+#' @param size_point,size_label the size of points and label. size_lable is used when label is not NULL.
+#' @param ... additional parameters passed to ggplot
+#' @return The plotted ggplot object
+#'
+#' @details The shape scatter plot represents the four p-values (corresponding to four shape types) of SHARP test on a 2D space.
 #' it can not only visualize the conclusions of the test, but also the confidence level of the test.
 #' The plot surface is divided into two parts along two perpendicular directions, corresponding to two opposite shapes.
 #' The coordinates of points are derived from p-values such that:
@@ -24,15 +34,12 @@
 #' * Significant shapes are placed in the edge area out of the significance thresholds (p < 0.05)
 #' * The closer points are to the significance thresholds, the more ambiguous shape conclusion is
 #'
+#' Axis can be scaled for better visual presentation. When scale = "log", a log-based transformation is implemented as follows:
+#' \deqn{f(x) = 1-\frac{log(1+a(1-|x|))}{log(1+a)}} where \eqn{a=\frac{1-2\alpha}{\alpha^2}}.
 #'
-#' @param pinc,pdec,pconc,pconv SHARP test p-values corresponding to increasing, decreasing, concave and convex
-#' @param alpha significance threshold. alpha=NULL corresponding to no significance threshold
-#' @param scale if the axis should be scale so that the significant threshold is placed in the center
-#'              Temporary: customized transformation
-#' @param label labels of the point to visualize. label=NULL means no labeling.
-#' @param size_point,size_label the size of points and label. size_lable is used when label is not NULL.
-#' @param ... additional parameters passed to ggplot
-#' @return The plotted ggplot object
+#' When scale = "linear", a piece-wise linear transformation is implemented:
+#' \deqn{f(x) = 1-0.5\frac{(1-|x|)}{\alpha}I(|x|>1-\alpha)+\frac{0.5|x|}{1-\alpha}I(|x| \leq \alpha)}
+#' In both case, the significant and insignificant regions are also evenly divided in each test.
 #'
 #' @export
 #' @examples
@@ -50,8 +57,7 @@
 #' # Plot the graph
 #' SharpScatter(sharpt[1], sharpt[2], sharpt[3], sharpt[4], niter = 100)
 
-SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE,
-                         transform = NULL,
+SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = "log",
                          label = NULL, size_point=2, size_label = 5,...){
   # coordinates for points
   ycoord = 0*(pinc==pdec)+(1-pinc)*(pinc<pdec)+(pdec-1)*(pinc>pdec)
@@ -74,20 +80,18 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE,
   }
 
   # scale significance threshold
-  if(scale & is.null(transform)){
+  if(scale == "linear"){
+    # piecewise linear transformation
     NewScale <- function(x){
       newx <- ifelse(abs(x)>(1-alpha), 1-((1-abs(x))/alpha)*0.5, abs(x)*0.5/(1-alpha))
       newx = sign(x)*newx
       return(newx)
     }
-
-    # scaling functions
     InverseNewScale <- function(y){
       origy <- ifelse(abs(y) > 0.5, 1 - ((1 - abs(y)) * alpha / 0.5), abs(y) * (1-alpha) / 0.5)
       origy = sign(y) * origy
       return(origy)
     }
-    # transformation object
     NewTrans <- trans_new(
       name = "NewTrans",
       transform = NewScale,
@@ -98,14 +102,28 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE,
                          breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
       scale_y_continuous(trans = NewTrans, limits = c(-1, 1),
                          breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))
-  } else if(scale & !is.null(transform)) {
+  } else if(scale == "log") {
+    # log-base transformation
+    a <- (1 - 2 * alpha) / alpha^2
+    NewScale <- function(x) {
+      sign(x) * (1 - log(1 + a * (1 - abs(x))) / log(1 + a))
+    }
+    InverseNewScale <- function(y) {
+      sign(y) * ((1 + a - (1 + a)^(1 - abs(y))) / a)
+    }
+    NewTrans <- trans_new(
+      name = "NewTrans",
+      transform = NewScale,
+      inverse = InverseNewScale
+    )
     sharp_scatter <- sharp_scatter+
-      scale_x_continuous(trans = transform, limits = c(-1, 1),
+      scale_x_continuous(trans = NewTrans, limits = c(-1, 1),
                          breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
-      scale_y_continuous(trans = transform, limits = c(-1, 1),
+      scale_y_continuous(trans = NewTrans, limits = c(-1, 1),
                          breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))
 
   } else {
+    # no transformation
     sharp_scatter <- sharp_scatter+
       scale_x_continuous(breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
       scale_y_continuous(breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))
@@ -118,16 +136,15 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = TRUE,
     sharp_scatter <- sharp_scatter+geom_text(aes(label=label), size = size_label)
   }
 
-  # # add axis label
+  # add axis label
   sharp_scatter <- sharp_scatter+
-  #   scale_x_continuous(breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
-  #   scale_y_continuous(breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
     annotate("text", x = c(-1, 1), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1)+
     annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"), hjust = 1.1)
 
  return(sharp_scatter)
 
 }
+
 
 
 

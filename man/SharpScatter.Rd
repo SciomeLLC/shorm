@@ -10,7 +10,7 @@ SharpScatter(
   pconc,
   pconv,
   alpha = 0.05,
-  scale = TRUE,
+  scale = "log",
   label = NULL,
   size_point = 2,
   size_label = 5,
@@ -22,7 +22,7 @@ SharpScatter(
 
 \item{alpha}{significance threshold. alpha=NULL corresponding to no significance threshold}
 
-\item{scale}{if the axis should be scale so that the significant threshold is placed in the center}
+\item{scale}{how axis should be scaled for better visual presentation. Choose between none, log and linear. Please see details for the transformation fomula.}
 
 \item{label}{labels of the point to visualize. label=NULL means no labeling.}
 
@@ -46,6 +46,13 @@ The coordinates of points are derived from p-values such that:
 \item Significant shapes are placed in the edge area out of the significance thresholds (p < 0.05)
 \item The closer points are to the significance thresholds, the more ambiguous shape conclusion is
 }
+
+Axis can be scaled for better visual presentation. When scale = "log", a log-based transformation is implemented as follows:
+\deqn{f(x) = 1-\frac{log(1+a(1-|x|))}{log(1+a)}} where \eqn{a=\frac{1-2\alpha}{\alpha^2}}.
+
+When scale = "linear", a piece-wise linear transformation is implemented:
+\deqn{f(x) = 1-0.5\frac{(1-|x|)}{\alpha}I(|x|>1-\alpha)+\frac{0.5|x|}{1-\alpha}I(|x| \leq \alpha)}
+In both case, the significant and insignificant regions are also evenly divided in each test.
 }
 \examples{
 # Simulate dose-response data

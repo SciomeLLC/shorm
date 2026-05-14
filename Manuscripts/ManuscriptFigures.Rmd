@@ -159,12 +159,12 @@ df_plot <- df_pvals %>% filter(Readout == "mixture-are-bla-p1_ratio") %>%
   left_join(sample_info)
 
 SharpScatter(df_plot$increase, df_plot$decrease, df_plot$concave, df_plot$convex, 
-             col = df_plot$botanical_group, scale = T, transform = NULL)+
+             col = df_plot$botanical_group, scale = "log")+
   labs(col="", title = "mixture-are-bla-p1_ratio",
        caption = "Piecewise linear transform")
 ```
 
-```{r power_trans, fig.height=8, fig.width=10}
+```{r power_trans, fig.height=8, fig.width=10, eval = F}
 alpha <- 0.05
 p <- log(0.5) / log(alpha)
 
@@ -192,7 +192,7 @@ SharpScatter(df_plot$increase, df_plot$decrease, df_plot$concave, df_plot$convex
        caption = "Power-ish transform: f(x) = 1-x^a, a=log(0.5)/log(alpha)")
 ```
 
-```{r log_trans, fig.height=8, fig.width=10}
+```{r log_trans, fig.height=8, fig.width=10, eval = F}
 alpha <- 0.05
 
 # Choose a so that ±(1 - alpha) maps to ±0.5
@@ -383,24 +383,25 @@ rects$fill <- factor(rects$fill, levels = c("Hormesis", "U shape", "Monotone", "
 ```
 
 ```{r}
-alpha = 0.05
-# scaling functions
-NewScale <- function(x){
-      newx <- ifelse(abs(x)>(1-alpha), 1-((1-abs(x))/alpha)*0.5, abs(x)*0.5/(1-alpha))
-      newx = sign(x)*newx
-      return(newx)
-    }
 
-InverseNewScale <- function(y){
-  origy <- ifelse(abs(y) > 0.5, 1 - ((1 - abs(y)) * alpha / 0.5), abs(y) * (1-alpha) / 0.5)
-  origy = sign(y) * origy
-  return(origy)
+# Choose a so that ±(1 - alpha) maps to ±0.5
+a <- (1 - 2 * alpha) / alpha^2
+
+# Symmetric log-based transformation
+NewScaleLog <- function(x) {
+  sign(x) * (1 - log(1 + a * (1 - abs(x))) / log(1 + a))
 }
-# transformation object
-NewTrans <- trans_new(
-  name = "NewTrans",
-  transform = NewScale,
-  inverse = InverseNewScale
+
+# Inverse transformation
+InverseNewScaleLog <- function(y) {
+  sign(y) * ((1 + a - (1 + a)^(1 - abs(y))) / a)
+}
+
+# Transformation object
+NewTransLog <- trans_new(
+  name = "edge_expand_log",
+  transform = NewScaleLog,
+  inverse = InverseNewScaleLog
 )
 ```
 
@@ -414,9 +415,9 @@ ggplot()+
     theme_minimal()+
     geom_hline(yintercept = c(1-0.05, -1+0.05), linetype = "dashed", linewidth = 0.5)+
     geom_vline(xintercept = c(1-0.05, -1+0.05), linetype = "dashed", linewidth = 0.5)+
-    scale_x_continuous(trans = NewTrans, limits = c(-1, 1),
+    scale_x_continuous(trans = NewTransLog, limits = c(-1, 1),
                         breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
-    scale_y_continuous(trans = NewTrans, limits = c(-1, 1),
+    scale_y_continuous(trans = NewTransLog, limits = c(-1, 1),
                         breaks = c(alpha-1, 1-alpha), labels = c("p=0.05", "p=0.05"))+
     geom_rect(
         data = rects,
@@ -460,7 +461,8 @@ df_plot <- output_chem_k %>%
 
 SharpScatter(df_plot$increase, df_plot$decrease,
              df_plot$concave,df_plot$convex, 
-             col = df_plot$Readout, size_point = 2)+
+             col = df_plot$Readout, size_point = 2,
+             scale = "log")+
   # scale_color_discrete("", labels = color_label)+
   theme(legend.direction = "horizontal", legend.position = "top")+
   labs(col=" ")
