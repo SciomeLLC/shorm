@@ -159,9 +159,11 @@ df_plot <- df_pvals %>% filter(Readout == "mixture-are-bla-p1_ratio") %>%
   left_join(sample_info)
 
 SharpScatter(df_plot$increase, df_plot$decrease, df_plot$concave, df_plot$convex, 
-             col = df_plot$botanical_group, scale = "log")+
-  labs(col="", title = "mixture-are-bla-p1_ratio",
-       caption = "Piecewise linear transform")
+             col = df_plot$botanical_group, scale = "log",
+             size_text = 15)+
+  labs(col="", title = "are-bla-p1_ratio")+
+  theme(plot.title = element_text(size = 15),
+        text = element_text(size = 15), )
 ```
 
 ```{r power_trans, fig.height=8, fig.width=10, eval = F}
@@ -414,8 +416,13 @@ ggplot()+
     geom_hline(yintercept = 0, linewidth = 0.5) +  # center y-axis
     geom_vline(xintercept = 0, linewidth = 0.5) +  # center x-axis
     labs(x=" ", y=" ", fill = " ")+
-    theme(panel.grid = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())+
-    theme_minimal()+
+    coord_cartesian(clip = "off")+
+    theme(panel.grid = element_blank(), 
+          axis.text = element_text(size = 15), 
+          axis.ticks = element_blank(),
+           legend.text = element_text(size = 15),
+          legend.title = element_text(size = 15),
+          plot.margin = margin(10, 40, 10, 40))+
     geom_hline(yintercept = c(1-0.05, -1+0.05), linetype = "dashed", linewidth = 0.5)+
     geom_vline(xintercept = c(1-0.05, -1+0.05), linetype = "dashed", linewidth = 0.5)+
     scale_x_continuous(trans = NewTransLog, limits = c(-1, 1),
@@ -427,8 +434,8 @@ ggplot()+
         aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
         alpha = 0.8)+
   scale_fill_manual(values = my_cols)+
-  annotate("text", x = c(-1, 1), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1)+
-  annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"), hjust = 1.1)
+  annotate("text", x = c(-1, 1), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1, size = 15/.pt)+
+  annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"), hjust = 1.1, size = 15/.pt)
 
 ```
 
@@ -460,24 +467,31 @@ plot_outs <- paste0("mixture-", plot_outs)
 # names(color_label) <- plot_outs
 
 df_plot <- output_chem_k %>%
-  filter(Readout %in% plot_outs) 
+  filter(Readout %in% plot_outs) %>%
+  mutate(Readout = gsub("mixture-", "", Readout))
 
 SharpScatter(df_plot$increase, df_plot$decrease,
              df_plot$concave,df_plot$convex, 
              col = df_plot$Readout, size_point = 2,
              scale = "log")+
   # scale_color_discrete("", labels = color_label)+
-  theme(legend.direction = "horizontal", legend.position = "top")+
+  theme(legend.direction = "horizontal", legend.position = "top",
+        text = element_text(size = 15),
+        legend.text = element_text(size = 13))+
   labs(col=" ")
+
 ```
 
 ```{r scatter_demo_B, fig.height=6, fig.width=10}
 ds_curves %>%
   filter(sample_id=="NCGC00372872-01" & readout %in% plot_outs) %>%
+  mutate(readout = gsub("mixture-", "", readout)) %>%
     ggplot(aes(x=concs, y=resps))+
     geom_point(aes(col = readout))+
     geom_smooth(aes(col = readout), span = 0.7)+
-    theme(legend.position = "none")+
+    theme(legend.position = "none",
+          text = element_text(size = 15),
+          plot.title = element_text(size = 15))+
     facet_wrap(~readout, scales="free", nrow = 2)+
   labs(x="Dose", y = "Response")
 

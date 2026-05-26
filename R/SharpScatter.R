@@ -69,8 +69,10 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = "log",
     geom_hline(yintercept = 0, linewidth = 1) +  # center y-axis
     geom_vline(xintercept = 0, linewidth = 1) +  # center x-axis
     labs(x=" ", y=" ")+
-    theme(panel.grid = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())+
-    theme_minimal()
+    coord_cartesian(clip = "off")+
+    #theme_minimal()+
+    theme(panel.grid = element_blank(),
+          axis.ticks = element_blank())
 
   # visualization threshold
   if(!is.null(alpha)){
@@ -138,8 +140,10 @@ SharpScatter <- function(pinc, pdec, pconc, pconv, alpha = 0.05, scale = "log",
 
   # add axis label
   sharp_scatter <- sharp_scatter+
-    annotate("text", x = c(-1, 1), y = c(0,0), label = c("Convex", "Concave"), vjust = 1.1)+
-    annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"), hjust = 1.1)
+    annotate("text", x = c(-1, 1), y = c(0,0), label = c("Convex", "Concave"),
+             vjust = 1.1, size = 15/.pt)+
+    annotate("text", y = c(-1, 1), x = c(0,0), label = c("Decrease", "Increase"),
+             hjust = 1.1, size = 15/.pt)
 
  return(sharp_scatter)
 
