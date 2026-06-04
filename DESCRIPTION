@@ -1,6 +1,6 @@
 Package: shorm
 Title: Detect the Shape of Dose-Response Curves
-Version: 0.1.3
+Version: 0.2.1
 Authors@R: c( 
     person(given = "Eric",
     	   family = "Bair",
@@ -13,7 +13,6 @@ Description: Provides functions for hormesis screening by classifying the shapes
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Imports:
         SRMERS,
         ggplot2,
@@ -24,3 +23,4 @@ Collate:
 	'SHARPtest.R'
 	'SharpScatter.R'
 URL: https://github.com/YinglJin-0203/shorm
+Config/roxygen2/version: 8.0.0
