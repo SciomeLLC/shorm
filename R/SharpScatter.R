@@ -39,15 +39,12 @@
 #' When scale = "linear", a piece-wise linear transformation is implemented:
 #' \deqn{f(x) = 1-0.5\frac{(1-|x|)}{\alpha}I(|x|>1-\alpha)+\frac{0.5|x|}{1-\alpha}I(|x| \leq \alpha)}
 #' In both cases, the significant and insignificant regions are also evenly divided in each test.
+
 #'
 #' @export
 #' @examples
 #' # Simulate dose-response data
-#' x <- seq(0, 1, length.out = 48)
 #' y <- 2*sqrt(x)+rnorm(48)
-#' y[17:32] <- y[17:32]+0.5
-#' y[33:48] <- y[33:48]+1
-#' curve <- data.frame(x, y)
 #' curve$rep <- rep(1:3, each = 16)
 #'
 #' # Fixed-model based test
